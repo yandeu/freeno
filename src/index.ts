@@ -29,10 +29,10 @@ const getContainersFormatted = async () => {
   const containers = (await API.containers()).map(c => {
     return {
       Id: c.Id,
-      Image: c.Image,
+      // Image: c.Image,
       Create: c.Created,
       CreatedISO: new Date(c.Created * 1000).toISOString(),
-      AgeSeconds: Math.round(new Date().getTime() / 1000 - c.Created),
+      Age: Math.round(new Date().getTime() / 1000 - c.Created),
       Port: c.Ports[0]?.PublicPort
     }
   })
@@ -40,16 +40,16 @@ const getContainersFormatted = async () => {
   return containers
 }
 
-// dev kill container after 1 minute
+// kill container after timeout
 setInterval(async () => {
   const containers = await getContainersFormatted()
 
   for (const c of containers) {
-    if (c.AgeSeconds >= 500) {
+    if (c.Age >= config.timeout) {
       await killAndDeleteContainer(c.Id)
     }
   }
-}, 10_000)
+}, 15_000)
 
 app.get('/', _ => getContainersFormatted())
 
@@ -88,9 +88,8 @@ app.get('/run', async ctx => {
 
   const json = (await docker(`/containers/${create.Id}/json`)) as any
   const hostPort = json?.NetworkSettings?.Ports?.['3000/tcp']?.[0].HostPort
-  console.log('hostPort', hostPort)
 
-  return json
+  return { hostPort }
 })
 
 server.listen(3080).then(port => {
