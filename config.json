@@ -1,0 +1,17 @@
+{
+  "image": "ubuntu:latest",
+  "timeout": 900,
+  "containersMax": 5,
+  "containerConfig": {
+    "Entrypoint": [
+      "tail",
+      "-f",
+      "/dev/null"
+    ],
+    "HostConfig": {
+      "PublishAllPorts": true,
+      "Memory": 160000000,
+      "MemoryReservation": 60000000
+    }
+  }
+}
