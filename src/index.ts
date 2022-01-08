@@ -67,7 +67,7 @@ app.get('/kill-all', async () => {
 })
 
 app.get('/run', async ctx => {
-  if (CONTAINERS_RUNNING >= CONTAINERS_MAX) return ctx.res.status(429).send.text('max containers reached')
+  if (CONTAINERS_RUNNING >= CONTAINERS_MAX) return ctx.res.status(429).send.json({ msg: 'max containers reached' })
 
   const name = Math.random().toString(36).slice(2)
 
