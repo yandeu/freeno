@@ -1,11 +1,11 @@
 import * as API from './api.js'
-import { TinyServerHttps } from 'tiny-http2-server'
+import { TinyServerHttp } from 'tiny-http2-server'
 import { docker } from './docker'
 import { readFileSync } from 'fs'
 import cors from 'cors'
 import { httpRequest } from './httpRequest.js'
 
-const server = new TinyServerHttps()
+const server = new TinyServerHttp()
 const app = server.route
 const playgroundIp = '54.93.246.90'
 
