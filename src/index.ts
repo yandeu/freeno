@@ -2,9 +2,12 @@ import * as API from './api.js'
 import { TinyServerHttp } from 'tiny-http2-server'
 import { docker } from './docker'
 import { readFileSync } from 'fs'
+import cors from 'cors'
 
 const server = new TinyServerHttp()
 const app = server.route
+
+app.use(cors())
 
 const config = JSON.parse(readFileSync('config.json', { encoding: 'utf-8' })) as unknown as {
   image: string
