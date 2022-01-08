@@ -35,8 +35,8 @@ const getContainersFormatted = async () => {
       // Image: c.Image,
       Create: c.Created,
       CreatedISO: new Date(c.Created * 1000).toISOString(),
-      Age: Math.round(new Date().getTime() / 1000 - c.Created),
-      Port: c.Ports[0]?.PublicPort
+      Age: Math.round(new Date().getTime() / 1000 - c.Created)
+      // Port: c.Ports[0]?.PublicPort
     }
   })
   CONTAINERS_RUNNING = containers.length
