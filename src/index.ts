@@ -3,11 +3,36 @@ import { TinyServerHttps } from 'tiny-http2-server'
 import { docker } from './docker'
 import { readFileSync } from 'fs'
 import cors from 'cors'
+import { httpRequest } from './httpRequest.js'
 
 const server = new TinyServerHttps()
 const app = server.route
+const playgroundIp = '54.93.246.90'
 
 app.use(cors())
+
+// ping the instance
+const ping = (url: URL): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await httpRequest(url)
+        if (res) {
+          clearInterval(interval)
+          return resolve()
+        }
+      } catch (error) {
+        // console.log('waiting...')
+      }
+    }, 500)
+
+    const timeout = setTimeout(() => {
+      clearInterval(interval)
+      clearTimeout(timeout)
+      return reject()
+    }, 15_000)
+  })
+}
 
 const config = JSON.parse(readFileSync('config.json', { encoding: 'utf-8' })) as unknown as {
   image: string
@@ -66,6 +91,17 @@ app.get('/kill-all', async () => {
   return 'done'
 })
 
+app.get('/ping/:port', async ctx => {
+  const { port } = ctx.req.params
+
+  try {
+    await ping(new URL('http://' + playgroundIp + ':' + port))
+    ctx.res.status(200).send.text('ok')
+  } catch (error) {
+    ctx.res.status(500).send.text('failed')
+  }
+})
+
 app.get('/run', async ctx => {
   if (CONTAINERS_RUNNING >= CONTAINERS_MAX) return ctx.res.status(429).send.json({ msg: 'max containers reached' })
 
@@ -96,5 +132,5 @@ app.get('/run', async ctx => {
 })
 
 server.listen(3080).then(port => {
-  console.log(`http://127.0.0.1:${port}`)
+  console.log(`https://127.0.0.1:${port}`)
 })
