@@ -10,8 +10,8 @@
     ],
     "HostConfig": {
       "PublishAllPorts": true,
-      "Memory": 160000000,
-      "MemoryReservation": 60000000
+      "Memory": 256000000,
+      "MemoryReservation": 64000000
     }
   }
 }
