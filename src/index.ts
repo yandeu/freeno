@@ -1,10 +1,10 @@
 import * as API from './api.js'
-import { TinyServerHttp } from 'tiny-http2-server'
+import { TinyServerHttps } from 'tiny-http2-server'
 import { docker } from './docker'
 import { readFileSync } from 'fs'
 import cors from 'cors'
 
-const server = new TinyServerHttp()
+const server = new TinyServerHttps()
 const app = server.route
 
 app.use(cors())
