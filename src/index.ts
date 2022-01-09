@@ -5,6 +5,11 @@ import { readFileSync } from 'fs'
 import cors from 'cors'
 import { httpRequest } from './httpRequest.js'
 
+// provide an async exec (just in case)
+import { exec as execSync } from 'child_process'
+import { promisify } from 'util'
+const exec = promisify(execSync)
+
 const server = new TinyServerHttp()
 const app = server.route
 const playgroundIp = '54.93.246.90'
