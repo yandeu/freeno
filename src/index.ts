@@ -137,5 +137,5 @@ app.get('/run', async ctx => {
 })
 
 server.listen(3080).then(port => {
-  console.log(`https://127.0.0.1:${port}`)
+  console.log(`http://127.0.0.1:${port}`)
 })
